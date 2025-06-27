@@ -1,15 +1,17 @@
 "use client";
 
-import { useEffect } from "react";
-import { useTheme } from "next-themes";
-import ReactMarkdown from "react-markdown";
+import { marked } from "marked";
+import DOMPurify from "dompurify";
 
 export function Markdown({ content }: { content: string }) {
-  const { setTheme } = useTheme();
+  // Convert markdown to HTML
+  const rawHtml = marked(content);
 
-  useEffect(() => {
-    setTheme("light");
-  }, [setTheme]);
+  // Sanitize the HTML to prevent XSS
+  // @ts-ignore
+  const cleanHtml = DOMPurify.sanitize(rawHtml);
 
-  return <ReactMarkdown>{content}</ReactMarkdown>;
+  return (
+    <div className="prose" dangerouslySetInnerHTML={{ __html: cleanHtml }} />
+  );
 }

@@ -10,6 +10,7 @@ import {
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
@@ -21,6 +22,7 @@ import {
 } from "@/components/ui/sidebar";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { ModeToggle } from "@/components/modeToggle";
 
 // Menu items.
 const items = [
@@ -67,6 +69,13 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+      <SidebarFooter>
+        <SidebarMenu>
+          <SidebarMenuItem className="mx-auto">
+            <ModeToggle />
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarFooter>
       <SidebarRail className="items-start pt-8 pr-3 hover:cursor-default hover:border-0 hover:bg-transparent">
         <div className="z-10 flex h-4 w-4 justify-center rounded-full text-muted-foreground hover:cursor-pointer">
           {isCollapsed ? (
