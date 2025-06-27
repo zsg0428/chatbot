@@ -1,4 +1,11 @@
-import { Home, MessageSquare, Settings } from "lucide-react";
+"use client";
+import {
+  Home,
+  MessageSquare,
+  PanelLeftClose,
+  PanelLeftOpen,
+  Settings,
+} from "lucide-react";
 
 import {
   Sidebar,
@@ -10,9 +17,10 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail,
-  SidebarTrigger,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 // Menu items.
 const items = [
@@ -26,38 +34,47 @@ const items = [
     url: "/chat",
     icon: MessageSquare,
   },
-
-  {
-    title: "Settings",
-    url: "#",
-    icon: Settings,
-  },
 ];
 
 export function AppSidebar() {
+  const { toggleSidebar, state } = useSidebar();
+  const isCollapsed = state === "collapsed";
+  const pathName = usePathname();
+  console.log(pathName);
   return (
     <Sidebar collapsible="icon">
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Dempsey Zhang Chat App</SidebarGroupLabel>
+          <SidebarGroupLabel>
+            Chat With Smart(Not really lol) Dempsey
+          </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <Link href={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+              {items.map((item) => {
+                const isActive = item.url === pathName;
+                return (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton isActive={isActive} asChild>
+                      <Link href={item.url}>
+                        <item.icon />
+                        <span>{item.title}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                );
+              })}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarRail>
-        <SidebarTrigger className="hover:cursor-pointer" />
+      <SidebarRail className="items-start pt-8 pr-3 hover:cursor-default hover:border-0 hover:bg-transparent">
+        <div className="z-10 flex h-4 w-4 justify-center rounded-full text-muted-foreground hover:cursor-pointer">
+          {isCollapsed ? (
+            <PanelLeftOpen className="h-4 w-4" />
+          ) : (
+            <PanelLeftClose className="h-4 w-4" onClick={toggleSidebar} />
+          )}
+        </div>
       </SidebarRail>
     </Sidebar>
   );

@@ -9,6 +9,7 @@ export default function RootLayout({
   return (
     <div className="flex h-screen w-full gap-2">
       <AppSidebar />
+      <SidebarTrigger className="md:hidden" />
       <main className="flex h-screen w-full flex-1 overflow-hidden pl-2">
         {children}
       </main>
