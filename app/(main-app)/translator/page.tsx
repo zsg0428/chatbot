@@ -9,6 +9,7 @@ import { Markdown } from "@/components/ui/mark-down";
 import { TypingIndicator } from "@/components/ui/TypingIndicator";
 import { useChat } from "@ai-sdk/react";
 import { useEffect, useRef } from "react";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 export default function Translator() {
   const { messages, input, handleInputChange, handleSubmit, status } = useChat({
@@ -26,23 +27,43 @@ export default function Translator() {
   }, [messages, status]);
 
   return (
-    <>
-      <div className="flex h-screen w-full flex-col items-center pt-10">
-        <Label htmlFor="Translator" className="font-mono text-2xl">
-          AI Translator
+    <div className="flex h-screen w-full flex-col">
+      <div className="flex w-full flex-col items-center pt-10">
+        <Label
+          htmlFor="Translator"
+          className="flex flex-col font-mono text-2xl"
+        >
+          Dempseek AI Translator
+          <span>No Bullshit, just pure translation</span>
+          <span className="text-sm italic">
+            Type any words or phrases to get started!
+          </span>
         </Label>
-        <div className="mx-auto mt-16 flex w-full flex-col items-center justify-center gap-4 md:flex-row md:gap-2">
-          <Input type="text" className="h-10 w-1/2 md:w-1/3" />
+        <form
+          onSubmit={handleSubmit}
+          className="mx-auto mt-16 flex w-full flex-col items-center justify-center gap-4 md:flex-row md:gap-2"
+        >
+          <Input
+            type="text"
+            className="h-10 w-1/2 md:w-1/3"
+            value={input}
+            onChange={handleInputChange}
+            disabled={status === "streaming" || status === "submitted"}
+          />
           {/*TODO: adda spinnier*/}
-          <Button className="h-10">
+          <Button
+            className="h-10"
+            type="submit"
+            disabled={status === "streaming" || status === "submitted"}
+          >
             <Languages className="h-4 w-4" />
-            Translate
+            {status === "streaming" ? "Translating..." : "Translate"}
           </Button>
-        </div>
+        </form>
       </div>
 
       {/*Content Area*/}
-      <div className="flex-1 space-y-6 overflow-y-auto p-4">
+      <ScrollArea className="flex-1 overflow-y-auto p-4">
         {messages.map((message) => (
           <div
             key={message.id}
@@ -85,7 +106,7 @@ export default function Translator() {
         {(status === "streaming" || status === "submitted") && (
           <TypingIndicator />
         )}
-      </div>
-    </>
+      </ScrollArea>
+    </div>
   );
 }
