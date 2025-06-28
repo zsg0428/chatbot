@@ -12,7 +12,8 @@ export async function POST(req: Request) {
   });
 
   const result = await streamText({
-    model: openrouter("deepseek/deepseek-r1-0528:free"),
+    // model: openrouter("deepseek/deepseek-r1-0528:free"),
+    model: openrouter("deepseek/deepseek-chat-v3-0324:free"),
     messages, // Chat history from useChat()
     temperature: 0.3,
     system:
