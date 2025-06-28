@@ -1,6 +1,7 @@
 "use client";
 import {
   Home,
+  Languages,
   MessageSquare,
   PanelLeftClose,
   PanelLeftOpen,
@@ -35,6 +36,11 @@ const items = [
     title: "Chat",
     url: "/chat",
     icon: MessageSquare,
+  },
+  {
+    title: "Translator",
+    url: "/translator",
+    icon: Languages,
   },
 ];
 
