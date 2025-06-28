@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Markdown } from "@/components/ui/mark-down";
 import { TypingIndicator } from "@/components/ui/TypingIndicator";
 import { useEffect, useRef } from "react";
+import { Send } from "lucide-react";
 
 interface ChatBotProps {
   messages: UIMessage[];
@@ -95,7 +96,7 @@ export const ChatBot = ({
             className="flex-1 rounded-md border px-4 py-2 focus:ring-2 focus:ring-primary focus:outline-none"
           />
           <Button type="submit" disabled={!input.trim()}>
-            Send
+            <Send className="h-4 w-4" />
           </Button>
         </div>
       </form>

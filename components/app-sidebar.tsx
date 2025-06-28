@@ -48,7 +48,7 @@ export function AppSidebar() {
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel>
-            Chat With Smart(Not really lol) Dempsey
+            Chat With Smart(Maybe? lol) Dempseek
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
