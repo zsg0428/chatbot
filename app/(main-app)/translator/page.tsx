@@ -31,7 +31,7 @@ export default function Translator() {
       <div className="flex w-full flex-col items-center pt-10">
         <Label
           htmlFor="Translator"
-          className="flex flex-col font-mono text-2xl"
+          className="flex flex-col justify-center text-center font-mono text-2xl"
         >
           Dempseek AI Translator
           <span>No Bullshit, just pure translation</span>
