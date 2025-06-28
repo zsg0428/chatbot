@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Just a chatbot for fun",
-  description: "Just a quick chatbot for fun",
+  title: "Dempseek - Just an AI chatbot for fun",
+  description: "Just an AI chatbot for fun",
   icons: {
     icon: "/close-ai.jpg",
   },
