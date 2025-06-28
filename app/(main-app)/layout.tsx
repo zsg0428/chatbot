@@ -7,14 +7,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex h-screen w-full gap-2">
-      <div>
+    <div className="flex h-screen w-full">
+      {/* Sidebar - hidden on mobile, shown on md and up */}
+      <div className="hidden md:block">
         <AppSidebar />
-        <SidebarTrigger className="md:hidden" />
       </div>
-      <main className="flex h-screen w-full flex-1 overflow-hidden pl-2">
-        {children}
-      </main>
+
+      {/* Mobile sidebar trigger - shown only on mobile */}
+      <div className="fixed top-4 left-4 z-50 md:hidden">
+        <SidebarTrigger />
+      </div>
+
+      {/* Main content */}
+      <main className="h-full w-full flex-1 overflow-y-auto">{children}</main>
     </div>
   );
 }

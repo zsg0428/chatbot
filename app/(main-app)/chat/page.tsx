@@ -7,7 +7,7 @@ export default function Chat() {
   const { messages, input, handleInputChange, handleSubmit, status } =
     useChat();
   return (
-    <div className="w-full pt-10">
+    <div className="h-screen w-full pt-10">
       <ChatBot
         messages={messages}
         input={input}
