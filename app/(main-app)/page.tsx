@@ -9,7 +9,6 @@ export default function Home() {
         <TypingAnimation />
         {/*  This is my first chatbot app - just for fun and learning purposes*/}
       </div>
-
       <Link href="/chat">
         <Button className="mt-10 animate-pulse" variant="default">
           Go chat with Dempseek now!
