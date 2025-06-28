@@ -11,7 +11,7 @@ export default function Home() {
       </div>
 
       <Link href="/chat">
-        <Button className="mt-10" variant="default">
+        <Button className="mt-10 animate-pulse" variant="default">
           Go chat with Dempseek now!
         </Button>
       </Link>

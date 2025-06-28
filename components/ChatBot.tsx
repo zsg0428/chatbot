@@ -54,13 +54,17 @@ export const ChatBot = ({
 
             <div
               className={cn(
-                "max-w-[80%] rounded-lg px-4 py-2",
+                "max-w-[80%] rounded-lg px-4 py-2 break-words overflow-hidden",
                 message.role === "user" ? "bg-blue-500 text-black" : "bg-muted",
               )}
             >
               {message.parts.map((part, i) => {
                 if (part.type === "text") {
-                  return <Markdown key={i} content={part.text} />;
+                  return (
+                    <div key={i} className="break-words overflow-x-auto">
+                      <Markdown content={part.text} />
+                    </div>
+                  );
                 }
                 return null;
               })}
