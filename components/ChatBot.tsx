@@ -30,6 +30,9 @@ export const ChatBot = ({
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
+  // console.log("messages==>", messages);
+  // console.log("status==>", status);
+
   useEffect(() => {
     scrollToBottom();
   }, [messages, status]); // Re-run when messages or status changes
@@ -54,13 +57,17 @@ export const ChatBot = ({
 
             <div
               className={cn(
-                "max-w-[80%] rounded-lg px-4 py-2",
+                "max-w-[80%] overflow-hidden rounded-lg px-4 py-2 break-words",
                 message.role === "user" ? "bg-blue-500 text-black" : "bg-muted",
               )}
             >
               {message.parts.map((part, i) => {
                 if (part.type === "text") {
-                  return <Markdown key={i} content={part.text} />;
+                  return (
+                    <div key={i} className="overflow-x-auto break-words">
+                      <Markdown content={part.text} />
+                    </div>
+                  );
                 }
                 return null;
               })}
@@ -89,6 +96,7 @@ export const ChatBot = ({
       >
         <div className="flex gap-2">
           <input
+            disabled={status === "streaming" || status === "submitted"}
             type="text"
             value={input}
             onChange={handleInputChange}

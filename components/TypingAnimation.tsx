@@ -47,7 +47,7 @@ export default function TypingAnimation() {
   }, []);
 
   return (
-    <div className="mx-auto max-w-2xl rounded-lg bg-gray-900 p-4 text-left font-mono text-green-400">
+    <div className="mx-auto max-w-2xl rounded-lg bg-gray-500 p-4 text-left font-mono text-green-400 dark:bg-gray-900">
       <div className="mb-2 flex gap-2">
         <div className="h-3 w-3 rounded-full bg-red-500"></div>
         <div className="h-3 w-3 rounded-full bg-yellow-500"></div>
