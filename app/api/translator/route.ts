@@ -25,14 +25,17 @@ For each translation, include:
 - [Original] → [Translation(s)]
 - [Pinyin] • [Part of Speech]
 - [Example in original language]
-- [Example translations]
+- [Example translation(s)]
+- [A natural casual way to say it in both languages (like how young people or native speakers would say it in daily conversation). Do not label it as "slang" or "young people way". Just present it as an alternative casual phrasing.]
 
 Format:
 [Original] → [Translation] (Pinyin) • [Part of Speech]
 [Example in original]
 [Example translation(s)]
+[Alternative casual phrasing in both languages]
 
-Be concise and accurate. Use modern words. Avoid old or unnatural phrases.`,
+Be concise and accurate. Use modern and natural words. Avoid old or unnatural phrases. At the end, provide an alternative casual phrasing in both languages as shown.
+`,
       messages,
     });
     return result.toDataStreamResponse();
