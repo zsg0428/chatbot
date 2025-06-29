@@ -33,7 +33,9 @@ export default function Translator() {
           htmlFor="Translator"
           className="flex flex-col justify-center text-center font-mono text-2xl"
         >
-          Dempseek AI Translator
+          <span className="font-extrabold tracking-wider underline decoration-2 underline-offset-4">
+            Dempseek AI Translator
+          </span>
           <span>No Bullshit, just pure translation</span>
           <span className="text-sm italic">
             Type any words or phrases to get started!
