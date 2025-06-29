@@ -48,7 +48,6 @@ export function AppSidebar() {
   const { toggleSidebar, state } = useSidebar();
   const isCollapsed = state === "collapsed";
   const pathName = usePathname();
-  console.log(pathName);
   return (
     <Sidebar collapsible="icon">
       <SidebarContent>

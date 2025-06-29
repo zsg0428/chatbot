@@ -63,42 +63,47 @@ export default function Translator() {
       </div>
 
       {/*Content Area*/}
-      <ScrollArea className="flex-1 overflow-y-auto p-4">
-        {messages.map((message) => (
-          <div
-            key={message.id}
-            className={cn(
-              "flex items-start gap-3",
-              message.role === "user" ? "justify-end" : "justify-start",
-            )}
-          >
-            {message.role === "assistant" && (
-              <Avatar className="h-8 w-8">
-                <AvatarFallback>D</AvatarFallback>
-              </Avatar>
-            )}
-
+      <ScrollArea className="my-2 flex-1 overflow-y-auto p-4">
+        <div className="flex h-full flex-col space-y-4">
+          {messages.map((message) => (
             <div
+              key={message.id}
               className={cn(
-                "max-w-[80%] rounded-lg px-4 py-2",
-                message.role === "user" ? "bg-blue-500 text-black" : "bg-muted",
+                "flex items-start gap-3",
+                message.role === "user" ? "justify-end" : "justify-start",
               )}
             >
-              {message.parts.map((part, i) => {
-                if (part.type === "text") {
-                  return <Markdown key={i} content={part.text} />;
-                }
-                return null;
-              })}
-            </div>
+              {message.role === "assistant" && (
+                <Avatar className="h-8 w-8">
+                  <AvatarFallback>D</AvatarFallback>
+                </Avatar>
+              )}
 
-            {message.role === "user" && (
-              <Avatar className="h-8 w-8">
-                <AvatarFallback>You</AvatarFallback>
-              </Avatar>
-            )}
-          </div>
-        ))}
+              <div
+                className={cn(
+                  "max-w-[80%] rounded-lg px-4 py-2",
+                  message.role === "user"
+                    ? "bg-blue-500 text-black"
+                    : "bg-muted",
+                )}
+              >
+                {message.parts.map((part, i) => {
+                  if (part.type === "text") {
+                    return <Markdown key={i} content={part.text} />;
+                  }
+                  return null;
+                })}
+              </div>
+
+              {message.role === "user" && (
+                <Avatar className="h-8 w-8">
+                  <AvatarFallback>You</AvatarFallback>
+                </Avatar>
+              )}
+            </div>
+          ))}
+        </div>
+
         {/* Empty div to scroll into view */}
         <div ref={messagesEndRef} />
 
