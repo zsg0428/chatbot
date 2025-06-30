@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 export function TypingIndicator() {
   return (
     <div className="flex items-center space-x-1 p-2">
-      <span className="text-sm text-gray-500">Dempsey is typing</span>
+      <span className="text-sm text-gray-500">Dempseek is typing</span>
       <motion.span
         className="h-2 w-2 rounded-full bg-blue-500"
         animate={{ opacity: [0.2, 1, 0.2] }}

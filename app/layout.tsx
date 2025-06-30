@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { ThemeProvider } from "next-themes";
+import { Toaster } from "sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -18,7 +19,7 @@ export const metadata: Metadata = {
   title: "Dempseek - Just an AI chatbot for fun",
   description: "Just an AI chatbot for fun",
   icons: {
-    icon: "/close-ai.jpg",
+    icon: [{ url: "/logo-transparent.png", type: "image/png" }],
   },
 };
 
@@ -34,6 +35,7 @@ export default function RootLayout({
       >
         <ThemeProvider attribute="class" defaultTheme="light">
           <SidebarProvider>{children}</SidebarProvider>
+          <Toaster position="bottom-right" />
         </ThemeProvider>
       </body>
     </html>
