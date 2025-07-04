@@ -2,15 +2,23 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { Languages } from "lucide-react";
+import { Languages, Settings, Mic } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Markdown } from "@/components/ui/mark-down";
 import { TypingIndicator } from "@/components/ui/TypingIndicator";
 import { useChat } from "@ai-sdk/react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { SpeechButton, VoiceSelector } from "@/components/ui/speech-controls";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 export default function Translator() {
   const { messages, input, handleInputChange, handleSubmit, status } = useChat({
@@ -18,6 +26,8 @@ export default function Translator() {
   });
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const isMobile = useMediaQuery("(max-width: 768px)");
+  const [showVoiceSettings, setShowVoiceSettings] = useState(false);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -29,48 +39,83 @@ export default function Translator() {
 
   return (
     <div className="flex h-screen w-full flex-col">
-      <div className="flex w-full flex-col items-center pt-10">
+      <div className="flex w-full flex-col items-center pt-6 md:pt-10">
         <Label
           htmlFor="Translator"
-          className="flex flex-col justify-center text-center font-mono text-2xl"
+          className="flex flex-col justify-center text-center font-mono text-xl md:text-2xl"
         >
           <span className="font-extrabold tracking-wider underline decoration-2 underline-offset-4">
             Dempseek AI Translator
           </span>
-          <span>No Bullshit, just pure translation</span>
-          <span className="text-sm italic">
+          <span className="text-sm md:text-base">No Bullshit, just pure translation</span>
+          <span className="text-xs md:text-sm italic">
             Type any words or phrases to get started!
           </span>
         </Label>
         <form
           onSubmit={handleSubmit}
-          className="mx-auto mt-16 flex w-full flex-col items-center justify-center gap-4 md:flex-row md:gap-2"
+          className="mx-auto mt-8 md:mt-16 flex w-full flex-col items-center justify-center gap-4 px-4 md:flex-row md:gap-2"
         >
           <Input
             type="text"
-            className="h-10 w-1/2 md:w-1/3"
+            className="h-10 w-full md:w-1/3"
             value={input}
             onChange={handleInputChange}
             disabled={status === "streaming" || status === "submitted"}
           />
-          {/*TODO: adda spinnier*/}
           <Button
             className="h-10"
             type="submit"
             disabled={status === "streaming" || status === "submitted"}
           >
-            <Languages className="h-4 w-4" />
+            <Languages className="h-4 w-4 mr-2" />
             {status === "streaming" ? "Translating..." : "Translate"}
           </Button>
         </form>
       </div>
 
-      {/* Voice selector */}
-      <VoiceSelector />
+      {/* Voice selector - desktop version shown directly, mobile version in dialog */}
+      <div className="mt-4">
+        {isMobile ? (
+          <div className="flex justify-end px-4">
+            <Dialog open={showVoiceSettings} onOpenChange={setShowVoiceSettings}>
+              <DialogTrigger asChild>
+                <Button variant="outline" size="sm" className="flex items-center gap-1">
+                  <Mic className="h-4 w-4" />
+                  <span>Voice Settings</span>
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                  <DialogTitle className="flex items-center gap-2">
+                    <Mic className="h-4 w-4" />
+                    Voice Settings
+                  </DialogTitle>
+                </DialogHeader>
+                <VoiceSelector />
+              </DialogContent>
+            </Dialog>
+          </div>
+        ) : (
+          <div className="mx-auto max-w-3xl px-4">
+            <div className="rounded-lg border bg-card shadow-sm">
+              <div className="bg-primary/5 px-4 py-2 border-b">
+                <h4 className="font-medium text-sm flex items-center gap-1.5">
+                  <Mic className="h-3.5 w-3.5" />
+                  Voice Settings
+                </h4>
+              </div>
+              <div className="p-4">
+                <VoiceSelector />
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
 
       {/*Content Area*/}
-      <ScrollArea className="my-2 flex-1 overflow-y-auto p-4">
-        <div className="flex h-full flex-col space-y-4">
+      <ScrollArea className="my-4 flex-1 overflow-y-auto p-4">
+        <div className="flex h-full flex-col space-y-4 max-w-3xl mx-auto">
           {messages.map((message) => {
             const messageText = message.parts
               .filter((p) => p.type === "text")
