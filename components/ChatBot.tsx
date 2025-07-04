@@ -8,6 +8,7 @@ import { Markdown } from "@/components/ui/mark-down";
 import { TypingIndicator } from "@/components/ui/TypingIndicator";
 import { useEffect, useRef } from "react";
 import { Send } from "lucide-react";
+import { SpeechButton, VoiceSelector } from "@/components/ui/speech-controls";
 
 interface ChatBotProps {
   messages: UIMessage[];
@@ -30,66 +31,75 @@ export const ChatBot = ({
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  // console.log("messages==>", messages);
-  // console.log("status==>", status);
-
   useEffect(() => {
     scrollToBottom();
-  }, [messages, status]); // Re-run when messages or status changes
+  }, [messages, status]);
 
   return (
     <div className="flex h-full w-full flex-col">
-      {/* Messages container */}
+      {/* Voice selector at the top */}
+      <VoiceSelector />
+      
       <div className="flex-1 space-y-6 overflow-y-auto p-4">
-        {messages.map((message) => (
-          <div
-            key={message.id}
-            className={cn(
-              "flex items-start gap-3",
-              message.role === "user" ? "justify-end" : "justify-start",
-            )}
-          >
-            {message.role === "assistant" && (
-              <Avatar className="h-8 w-8">
-                <AvatarFallback>D</AvatarFallback>
-              </Avatar>
-            )}
-
+        {messages.map((message) => {
+          const messageText = message.parts
+            .filter((p) => p.type === "text")
+            .map((p) => p.text)
+            .join(" ");
+            
+          return (
             <div
+              key={message.id}
               className={cn(
-                "max-w-[80%] overflow-hidden rounded-lg px-4 py-2 break-words",
-                message.role === "user" ? "bg-blue-500 text-black" : "bg-muted",
+                "flex flex-col gap-1",
+                message.role === "user" ? "items-end" : "items-start",
               )}
             >
-              {message.parts.map((part, i) => {
-                if (part.type === "text") {
-                  return (
-                    <div key={i} className="overflow-x-auto break-words">
-                      <Markdown content={part.text} />
-                    </div>
-                  );
-                }
-                return null;
-              })}
+              <div className="flex items-start gap-3">
+                {message.role === "assistant" && (
+                  <Avatar className="h-8 w-8">
+                    <AvatarFallback>D</AvatarFallback>
+                  </Avatar>
+                )}
+
+                <div
+                  className={cn(
+                    "max-w-[80%] break-words overflow-hidden rounded-lg px-4 py-2",
+                    message.role === "user" ? "bg-blue-500 text-black" : "bg-muted",
+                  )}
+                >
+                  {message.parts.map((part, i) => {
+                    if (part.type === "text" && part.text) {
+                      return <Markdown key={i} content={part.text} />;
+                    }
+                    return null;
+                  })}
+                </div>
+
+                {message.role === "user" && (
+                  <Avatar className="h-8 w-8">
+                    <AvatarFallback>You</AvatarFallback>
+                  </Avatar>
+                )}
+              </div>
+              
+              {/* Speech button below the message bubble */}
+              {message.role === "assistant" && messageText && (
+                <div className="ml-11">
+                  <SpeechButton 
+                    text={messageText} 
+                    messageId={message.id} 
+                    showSettings={false}
+                  />
+                </div>
+              )}
             </div>
-
-            {message.role === "user" && (
-              <Avatar className="h-8 w-8">
-                <AvatarFallback>You</AvatarFallback>
-              </Avatar>
-            )}
-          </div>
-        ))}
-        {/* Empty div to scroll into view */}
+          );
+        })}
         <div ref={messagesEndRef} />
-
-        {/* Typing indicator */}
-        {(status === "streaming" || status === "submitted") && (
-          <TypingIndicator />
-        )}
+        {(status === "streaming" || status === "submitted") && <TypingIndicator />}
       </div>
 
-      {/* Input form */}
       <form
         onSubmit={handleSubmit}
         className="sticky bottom-0 border-t bg-background p-4"

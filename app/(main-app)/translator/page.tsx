@@ -10,6 +10,7 @@ import { TypingIndicator } from "@/components/ui/TypingIndicator";
 import { useChat } from "@ai-sdk/react";
 import { useEffect, useRef } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { SpeechButton, VoiceSelector } from "@/components/ui/speech-controls";
 
 export default function Translator() {
   const { messages, input, handleInputChange, handleSubmit, status } = useChat({
@@ -64,55 +65,74 @@ export default function Translator() {
         </form>
       </div>
 
+      {/* Voice selector */}
+      <VoiceSelector />
+
       {/*Content Area*/}
       <ScrollArea className="my-2 flex-1 overflow-y-auto p-4">
         <div className="flex h-full flex-col space-y-4">
-          {messages.map((message) => (
-            <div
-              key={message.id}
-              className={cn(
-                "flex items-start gap-3",
-                message.role === "user" ? "justify-end" : "justify-start",
-              )}
-            >
-              {message.role === "assistant" && (
-                <Avatar className="h-8 w-8">
-                  <AvatarFallback>D</AvatarFallback>
-                </Avatar>
-              )}
-
+          {messages.map((message) => {
+            const messageText = message.parts
+              .filter((p) => p.type === "text")
+              .map((p) => p.text)
+              .join(" ");
+              
+            return (
               <div
+                key={message.id}
                 className={cn(
-                  "max-w-[80%] rounded-lg px-4 py-2",
-                  message.role === "user"
-                    ? "bg-blue-500 text-black"
-                    : "bg-muted",
+                  "flex flex-col gap-1",
+                  message.role === "user" ? "items-end" : "items-start",
                 )}
               >
-                {message.parts.map((part, i) => {
-                  if (part.type === "text") {
-                    return <Markdown key={i} content={part.text} />;
-                  }
-                  return null;
-                })}
+                <div className={cn(
+                  "flex items-start gap-3",
+                )}>
+                  {message.role === "assistant" && (
+                    <Avatar className="h-8 w-8">
+                      <AvatarFallback>D</AvatarFallback>
+                    </Avatar>
+                  )}
+
+                  <div
+                    className={cn(
+                      "max-w-[80%] rounded-lg px-4 py-2",
+                      message.role === "user"
+                        ? "bg-blue-500 text-black"
+                        : "bg-muted",
+                    )}
+                  >
+                    {message.parts.map((part, i) => {
+                      if (part.type === "text") {
+                        return <Markdown key={i} content={part.text} />;
+                      }
+                      return null;
+                    })}
+                  </div>
+
+                  {message.role === "user" && (
+                    <Avatar className="h-8 w-8">
+                      <AvatarFallback>You</AvatarFallback>
+                    </Avatar>
+                  )}
+                </div>
+
+                {/* Speech button below the message bubble */}
+                {message.role === "assistant" && messageText && (
+                  <div className="ml-11">
+                    <SpeechButton 
+                      text={messageText} 
+                      messageId={message.id}
+                      showSettings={false}
+                    />
+                  </div>
+                )}
               </div>
-
-              {message.role === "user" && (
-                <Avatar className="h-8 w-8">
-                  <AvatarFallback>You</AvatarFallback>
-                </Avatar>
-              )}
-            </div>
-          ))}
+            );
+          })}
+          <div ref={messagesEndRef} />
+          {status === "streaming" && <TypingIndicator />}
         </div>
-
-        {/* Empty div to scroll into view */}
-        <div ref={messagesEndRef} />
-
-        {/* Typing indicator */}
-        {(status === "streaming" || status === "submitted") && (
-          <TypingIndicator />
-        )}
       </ScrollArea>
     </div>
   );
