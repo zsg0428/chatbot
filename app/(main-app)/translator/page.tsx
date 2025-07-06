@@ -2,7 +2,7 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { Languages, Settings, Mic } from "lucide-react";
+import { Languages, Settings, Mic, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Markdown } from "@/components/ui/mark-down";
@@ -14,6 +14,7 @@ import { SpeechButton, VoiceSelector } from "@/components/ui/speech-controls";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogHeader,
   DialogTitle,
@@ -26,7 +27,6 @@ export default function Translator() {
   });
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const isMobile = useMediaQuery("(max-width: 768px)");
   const [showVoiceSettings, setShowVoiceSettings] = useState(false);
 
   const scrollToBottom = () => {
@@ -74,43 +74,29 @@ export default function Translator() {
         </form>
       </div>
 
-      {/* Voice selector - desktop version shown directly, mobile version in dialog */}
-      <div className="mt-4">
-        {isMobile ? (
-          <div className="flex justify-end px-4">
-            <Dialog open={showVoiceSettings} onOpenChange={setShowVoiceSettings}>
-              <DialogTrigger asChild>
-                <Button variant="outline" size="sm" className="flex items-center gap-1">
-                  <Mic className="h-4 w-4" />
-                  <span>Voice Settings</span>
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="sm:max-w-[425px]">
-                <DialogHeader>
-                  <DialogTitle className="flex items-center gap-2">
-                    <Mic className="h-4 w-4" />
-                    Voice Settings
-                  </DialogTitle>
-                </DialogHeader>
-                <VoiceSelector />
-              </DialogContent>
-            </Dialog>
-          </div>
-        ) : (
-          <div className="mx-auto max-w-3xl px-4">
-            <div className="rounded-lg border bg-card shadow-sm">
-              <div className="bg-primary/5 px-4 py-2 border-b">
-                <h4 className="font-medium text-sm flex items-center gap-1.5">
-                  <Mic className="h-3.5 w-3.5" />
-                  Voice Settings
-                </h4>
-              </div>
-              <div className="p-4">
-                <VoiceSelector />
-              </div>
-            </div>
-          </div>
-        )}
+      {/* Voice selector - popup dialog for both mobile and desktop */}
+      <div className="mt-4 flex justify-end px-4">
+        <Dialog open={showVoiceSettings} onOpenChange={setShowVoiceSettings}>
+          <DialogTrigger asChild>
+            <Button variant="outline" size="sm" className="flex items-center gap-1">
+              <Mic className="h-4 w-4" />
+              <span>Voice Settings</span>
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-[425px]">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2">
+                <Mic className="h-4 w-4" />
+                Voice Settings
+              </DialogTitle>
+            </DialogHeader>
+            <VoiceSelector />
+            <DialogClose className="absolute top-4 right-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:outline-none disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
+              <X className="h-4 w-4" />
+              <span className="sr-only">Close</span>
+            </DialogClose>
+          </DialogContent>
+        </Dialog>
       </div>
 
       {/*Content Area*/}
